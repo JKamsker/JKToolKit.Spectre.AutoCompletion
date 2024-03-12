@@ -12,10 +12,19 @@
     Badges: Nuget, GitHub Actions, CodeFactor, License
  -->
 
-[![NuGet](https://img.shields.io/nuget/v/JKToolKit.Spectre.AutoCompletion)](https://www.nuget.org/packages/JKToolKit.Spectre.AutoCompletion/) [![Nuget](https://img.shields.io/nuget/dt/JKToolKit.Spectre.AutoCompletion)](https://www.nuget.org/packages/JKToolKit.Spectre.AutoCompletion)
+<!-- [![NuGet](https://img.shields.io/nuget/v/JKToolKit.Spectre.AutoCompletion)](https://www.nuget.org/packages/JKToolKit.Spectre.AutoCompletion/) [![Nuget](https://img.shields.io/nuget/dt/JKToolKit.Spectre.AutoCompletion)](https://www.nuget.org/packages/JKToolKit.Spectre.AutoCompletion)
 [![License](https://img.shields.io/github/license/JKamsker/JKToolKit.Spectre.AutoCompletion)](LICENSE) [![PR](https://img.shields.io/badge/PR-Welcome-blue)](https://github.com/JKamsker/JKToolKit.Spectre.AutoCompletion/pulls)
-<!-- [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JKamsker/JKToolKit.Spectre.AutoCompletion/.NET)]( -->
-<!-- [![CodeFactor](https://www.codefactor.io/repository/github/jkamsker/jktoolkit.spectre.autocompletion/badge)](https://www.codefactor.io/repository/github/jkamsker/jktoolkit.spectre.autocompletion) -->
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/JKamsker/JKToolKit.Spectre.AutoCompletion/build-test.yml?branch=master)](https://github.com/JKamsker/JKToolKit.Spectre.AutoCompletion/actions/workflows/build-test.yml) -->
+
+<p align="center">
+  <a href="https://www.nuget.org/packages/JKToolKit.Spectre.AutoCompletion/"><img src="https://img.shields.io/nuget/v/JKToolKit.Spectre.AutoCompletion" alt="NuGet"></a>
+  <a href="https://www.nuget.org/packages/JKToolKit.Spectre.AutoCompletion/"><img src="https://img.shields.io/nuget/dt/JKToolKit.Spectre.AutoCompletion" alt="Nuget"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/JKamsker/JKToolKit.Spectre.AutoCompletion" alt="License"></a>
+  <a href="https://github.com/JKamsker/JKToolKit.Spectre.AutoCompletion/pulls"><img src="https://img.shields.io/badge/PR-Welcome-blue" alt="PR"></a>
+  <a href="https://github.com/JKamsker/JKToolKit.Spectre.AutoCompletion/actions/workflows/build-test.yml"><img src="https://img.shields.io/github/actions/workflow/status/JKamsker/JKToolKit.Spectre.AutoCompletion/build-test.yml?branch=master" alt="GitHub Workflow Status"></a>
+</p>
+
+
 
 
 ``JKToolKit.Spectre.AutoCompletion`` is an extension package for adding auto completion to your [Spectre.Console](https://github.com/spectreconsole/spectre.console) powered applications. </br>
