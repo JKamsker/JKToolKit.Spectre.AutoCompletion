@@ -1,23 +1,3 @@
-
-
-<!-- assets\logo\logo_large.png as a center image 
- -->
-<!-- <p align="center">
-  <img src="assets\logo\logo_large.png" alt="Spectre.Console AutoCompletion" width="200" />
-</p>
-
-# Spectre.Console AutoCompletion -->
-
-
-<!-- <p align="center">
-  <a href="https://turbo.build">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/JKamsker/shlink-dotnet/master/resources/icon.png">
-      <img src="https://raw.githubusercontent.com/JKamsker/shlink-dotnet/master/resources/icon.png" height="128">
-    </picture>
-    <h1 align="center">Shlink .NET</h1>
-  </a>
-</p> -->
 <p align="center">
   <a>
     <picture>
