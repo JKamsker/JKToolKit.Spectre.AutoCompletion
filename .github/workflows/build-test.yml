@@ -1,0 +1,36 @@
+name: .NET Build and Test
+
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    # container:
+    #   image: mcr.microsoft.com/dotnet/sdk:7.0
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # Fetches all history for all tags and branches
+
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '7.0.x'
+
+    - name: Change directory to /src
+      run: cd src
+
+    - name: Clean
+      run: dotnet clean CiFilter.slnf
+
+    - name: Restore
+      run: dotnet restore CiFilter.slnf
+
+    - name: Build
+      run: dotnet build CiFilter.slnf --no-restore
+
+    # Optionally, you can add a test step if you have tests in your solution
+    - name: Test
+      run: dotnet test CiFilter.slnf --no-build --verbosity normal

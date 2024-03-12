@@ -1,0 +1,9 @@
+{
+  "solution": {
+    "path": "JKToolKit.Spectre.AutoCompletion.sln",
+    "projects": [
+      "JKToolKit.Spectre.AutoCompletion.Tests\\JKToolKit.Spectre.AutoCompletion.Tests.csproj",
+      "JKToolKit.Spectre.AutoCompletion\\JKToolKit.Spectre.AutoCompletion.csproj"
+    ]
+  }
+}
