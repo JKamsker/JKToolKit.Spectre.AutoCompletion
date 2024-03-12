@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<LangVersion>10.0</LangVersion>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+	</PropertyGroup>
+	
+
+	<PropertyGroup Condition="$(Configuration)=='Release'">
+		<Title>Spectre AutoCompletion Plugin</Title>
+		<Description>Spectre.Console AutoCompletion is a NuGet package enhancing Spectre.Console.Cli applications by providing shell auto completion. It offers built-in suggestions for options and branches, supports custom static and dynamic suggestions, and integrates seamlessly with PowerShell. The package is easy to install and configure, making it a valuable tool for enriching CLI applications.</Description>
+		
+		<PackageTags>Spectre.Console; AutoCompletion; Shell; PowerShell; CLI; Command Line Interface; Static Autocomplete; Dynamic Autocomplete; Shell Integrations; C#; Dotnet; CommandApp; CommandSettings; IAsyncCommandCompletable; Spectre.Console.Cli; Configurator; CommandArgument; CommandOption</PackageTags>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Spectre.Console" Version="0.46.1-preview.0.19" />
+		<PackageReference Include="Spectre.Console.Cli" Version="0.46.1-preview.0.19" />
+	</ItemGroup>
+	<ItemGroup>
+		<InternalsAssemblyName Include="Spectre.Console" />
+		<InternalsAssemblyName Include="Spectre.Console.Cli" />
+		<PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.6.0" PrivateAssets="All" />
+	</ItemGroup>
+
+</Project>

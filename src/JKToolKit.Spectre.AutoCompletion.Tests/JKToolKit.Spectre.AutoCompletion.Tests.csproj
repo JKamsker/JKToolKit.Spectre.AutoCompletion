@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="IsExternalInit" Version="1.0.2" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit" Version="1.1.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.XUnit" Version="1.1.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.6.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
+		<PackageReference Include="Shouldly" Version="4.1.0" />
+		<PackageReference Include="xunit" Version="2.4.2" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Spectre.Verify.Extensions" Version="18.0.0" />
+		
+		<PackageReference Include="Spectre.Console" Version="0.46.1-preview.0.19" />
+		<PackageReference Include="Spectre.Console.Cli" Version="0.46.1-preview.0.19" />
+		<PackageReference Include="Spectre.Console.Testing" Version="0.46.1-preview.0.19" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!--<ProjectReference Include="..\JKToolKit.Spectre.AutoCompletion.Integrations\JKToolKit.Spectre.AutoCompletion.Integrations.csproj" />-->
+		<ProjectReference Include="..\JKToolKit.Spectre.AutoCompletion\JKToolKit.Spectre.AutoCompletion.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Expectations\Help\Default_Without_Args_Additional.Output.verified.txt">
+			<ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+			<DependentUpon>%(ParentFile).cs</DependentUpon>
+		</None>
+		<None Update="Expectations\Help\Default_Greeter.Output.verified.txt">
+			<ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+			<DependentUpon>%(ParentFile).cs</DependentUpon>
+		</None>
+	</ItemGroup>
+
+</Project>
