@@ -32,13 +32,13 @@ jobs:
 
     - name: Install Spectre dependency
       run: | 
-        dotnet remove package Spectre.Console
-        dotnet remove package Spectre.Console.Cli
-        dotnet remove package Spectre.Console.Testing
-        
-        dotnet add package Spectre.Console --version ${{ matrix.spectre_version }}
-        dotnet add package Spectre.Console.Cli --version ${{ matrix.spectre_version }}
-        dotnet add package Spectre.Console.Testing --version ${{ matrix.spectre_version }}
+        dotnet remove ./JKToolKit.Spectre.AutoCompletion.Tests/JKToolKit.Spectre.AutoCompletion.Tests.csproj package Spectre.Console
+        dotnet remove ./JKToolKit.Spectre.AutoCompletion.Tests/JKToolKit.Spectre.AutoCompletion.Tests.csproj package Spectre.Console.Cli
+        dotnet remove ./JKToolKit.Spectre.AutoCompletion.Tests/JKToolKit.Spectre.AutoCompletion.Tests.csproj package Spectre.Console.Testing
+
+        dotnet add ./JKToolKit.Spectre.AutoCompletion.Tests/JKToolKit.Spectre.AutoCompletion.Tests.csproj package Spectre.Console --version ${{ matrix.spectre_version }}
+        dotnet add ./JKToolKit.Spectre.AutoCompletion.Tests/JKToolKit.Spectre.AutoCompletion.Tests.csproj package Spectre.Console.Cli --version ${{ matrix.spectre_version }}
+        dotnet add ./JKToolKit.Spectre.AutoCompletion.Tests/JKToolKit.Spectre.AutoCompletion.Tests.csproj package Spectre.Console.Testing --version ${{ matrix.spectre_version }}
 
     - name: Restore
       run: dotnet restore CiFilter.slnf
