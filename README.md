@@ -12,8 +12,8 @@
     Badges: Nuget, GitHub Actions, CodeFactor, License
  -->
 
-[![NuGet](https://img.shields.io/nuget/v/JKToolKit.Spectre.AutoCompletion)](https://www.nuget.org/packages/JKToolKit.Spectre.AutoCompletion/)
-[![License](https://img.shields.io/github/license/JKamsker/JKToolKit.Spectre.AutoCompletion)](LICENSE)[![PR](https://img.shields.io/badge/PR-Welcome-blue)](https://github.com/JKamsker/shlink-dotnet/pulls)
+[![NuGet](https://img.shields.io/nuget/v/JKToolKit.Spectre.AutoCompletion)](https://www.nuget.org/packages/JKToolKit.Spectre.AutoCompletion/) [![Nuget](https://img.shields.io/nuget/dt/JKToolKit.Spectre.AutoCompletion)](https://www.nuget.org/packages/JKToolKit.Spectre.AutoCompletion)
+[![License](https://img.shields.io/github/license/JKamsker/JKToolKit.Spectre.AutoCompletion)](LICENSE)[![PR](https://img.shields.io/badge/PR-Welcome-blue)](https://github.com/JKamsker/JKToolKit.Spectre.AutoCompletion/pulls)
 <!-- [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JKamsker/JKToolKit.Spectre.AutoCompletion/.NET)]( -->
 <!-- [![CodeFactor](https://www.codefactor.io/repository/github/jkamsker/jktoolkit.spectre.autocompletion/badge)](https://www.codefactor.io/repository/github/jkamsker/jktoolkit.spectre.autocompletion) -->
 
