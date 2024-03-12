@@ -140,4 +140,4 @@ public class LionCommand : Command<LionSettings>, IAsyncCommandCompletable
 ```
 
 
-There is a working [example of the AutoCompletion feature](src/samples/AutoCompletionExample) demonstrating this.
+There is a working [example of the AutoCompletion feature](src/samples/AutoCompletionExample/Program.cs) demonstrating this.
