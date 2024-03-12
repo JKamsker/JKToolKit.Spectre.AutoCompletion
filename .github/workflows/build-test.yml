@@ -32,9 +32,13 @@ jobs:
 
     - name: Install Spectre dependency
       run: | 
-        dotnet tool install --global Spectre.Console --version ${{ matrix.spectre_version }}
-        dotnet tool install --global Spectre.Console.Cli --version ${{ matrix.spectre_version }}
-        dotnet tool install --global Spectre.Console.Testing --version ${{ matrix.spectre_version }}
+        dotnet remove package Spectre.Console
+        dotnet remove package Spectre.Console.Cli
+        dotnet remove package Spectre.Console.Testing
+        
+        dotnet add package Spectre.Console --version ${{ matrix.spectre_version }}
+        dotnet add package Spectre.Console.Cli --version ${{ matrix.spectre_version }}
+        dotnet add package Spectre.Console.Testing --version ${{ matrix.spectre_version }}
 
     - name: Restore
       run: dotnet restore CiFilter.slnf
