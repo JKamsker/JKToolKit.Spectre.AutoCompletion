@@ -10,8 +10,10 @@ defaults:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    
-    
+    strategy:
+      matrix:
+        spectre_version: ['0.46.1-preview.0.19', '0.47.0', '0.48.0', '0.48.1-preview.0.35'] # Add more versions as needed
+
     # container:
     #   image: mcr.microsoft.com/dotnet/sdk:7.0
 
@@ -25,11 +27,14 @@ jobs:
       with:
         dotnet-version: '7.0.x'
 
-    # - name: Change directory to /src
-    #   run: cd src
-
     - name: Clean
-      run: ls && dotnet clean CiFilter.slnf
+      run: dotnet clean CiFilter.slnf
+
+    - name: Install Spectre dependency
+      run: | 
+        dotnet tool install --global Spectre.Console --version ${{ matrix.spectre_version }}
+        dotnet tool install --global Spectre.Console.Cli --version ${{ matrix.spectre_version }}
+        dotnet tool install --global Spectre.Console.Testing --version ${{ matrix.spectre_version }}
 
     - name: Restore
       run: dotnet restore CiFilter.slnf
