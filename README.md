@@ -8,7 +8,7 @@
 
 # Spectre.Console AutoCompletion
 
-``JKToolKit.Spectre.AutoCompletion`` is an extension package for adding auto completion to your ``Spectre.Console`` powered applications. </br>
+``JKToolKit.Spectre.AutoCompletion`` is an extension package for adding auto completion to your [Spectre.Console](https://github.com/spectreconsole/spectre.console) powered applications. </br>
 It comes with suggestions for Options and Branches out of the box, but you can also add your own suggestions for option and argument values.
 
 - [Shell integrations](#shell-integrations)
