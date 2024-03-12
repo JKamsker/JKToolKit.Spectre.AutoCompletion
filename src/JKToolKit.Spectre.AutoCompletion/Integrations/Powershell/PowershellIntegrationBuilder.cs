@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using JKToolKit.Spectre.AutoCompletion.Integrations.Properties;
+using JKToolKit.Spectre.AutoCompletion.Properties;
+
 public class StartArgs
 {
     public string Runtime { get; }
@@ -115,6 +116,7 @@ public static class PowershellIntegrationBuilder
         var result = Encoding.UTF8.GetString(powershellIntegration_Install);
         return ApplyReplacements(replacements, result);
     }
+
     private static string GetResource(string resourceName, Dictionary<string, string> replacements)
     {
         var result = Resources.ResourceManager.GetString(resourceName) ?? throw new InvalidOperationException($"Could not find resource '{resourceName}'.");
@@ -129,6 +131,4 @@ public static class PowershellIntegrationBuilder
         }
         return result;
     }
-
- 
 }
