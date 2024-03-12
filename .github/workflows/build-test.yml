@@ -23,7 +23,7 @@ jobs:
       run: cd src
 
     - name: Clean
-      run: dotnet clean CiFilter.slnf
+      run: ls && dotnet clean CiFilter.slnf
 
     - name: Restore
       run: dotnet restore CiFilter.slnf
