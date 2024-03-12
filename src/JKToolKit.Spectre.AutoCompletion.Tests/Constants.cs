@@ -19,10 +19,11 @@ public static class Constants
     public static string[] CompleteCommand { get; } =
         new[]
         {
-                CliConstants.Commands.Branch,
+                "completion",
                 CliConstants.Commands.Complete,
         };
 }
+
 internal static class CliConstants
 {
     public const string DefaultCommandName = "__default_command";
