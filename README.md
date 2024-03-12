@@ -2,11 +2,32 @@
 
 <!-- assets\logo\logo_large.png as a center image 
  -->
-<p align="center">
+<!-- <p align="center">
   <img src="assets\logo\logo_large.png" alt="Spectre.Console AutoCompletion" width="200" />
 </p>
 
-# Spectre.Console AutoCompletion
+# Spectre.Console AutoCompletion -->
+
+
+<!-- <p align="center">
+  <a href="https://turbo.build">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/JKamsker/shlink-dotnet/master/resources/icon.png">
+      <img src="https://raw.githubusercontent.com/JKamsker/shlink-dotnet/master/resources/icon.png" height="128">
+    </picture>
+    <h1 align="center">Shlink .NET</h1>
+  </a>
+</p> -->
+<p align="center">
+  <a>
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/JKamsker/JKToolKit.Spectre.AutoCompletion/master/assets/logo/logo_small_128x128.png">
+      <img src="https://raw.githubusercontent.com/JKamsker/JKToolKit.Spectre.AutoCompletion/master/assets/logo/logo_small_128x128.png" height="128">
+    </picture>
+    <h1 align="center">Spectre.Console AutoCompletion</h1>
+  </a>
+</p>
+
 
 ``JKToolKit.Spectre.AutoCompletion`` is an extension package for adding auto completion to your [Spectre.Console](https://github.com/spectreconsole/spectre.console) powered applications. </br>
 It comes with suggestions for Options and Branches out of the box, but you can also add your own suggestions for option and argument values.
