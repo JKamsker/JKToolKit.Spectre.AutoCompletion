@@ -8,6 +8,15 @@
   </a>
 </p>
 
+<!-- 
+    Badges: Nuget, GitHub Actions, CodeFactor, License
+ -->
+
+[![NuGet](https://img.shields.io/nuget/v/JKToolKit.Spectre.AutoCompletion)](https://www.nuget.org/packages/JKToolKit.Spectre.AutoCompletion/)
+[![License](https://img.shields.io/github/license/JKamsker/JKToolKit.Spectre.AutoCompletion)](LICENSE)
+<!-- [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JKamsker/JKToolKit.Spectre.AutoCompletion/.NET)]( -->
+<!-- [![CodeFactor](https://www.codefactor.io/repository/github/jkamsker/jktoolkit.spectre.autocompletion/badge)](https://www.codefactor.io/repository/github/jkamsker/jktoolkit.spectre.autocompletion) -->
+
 
 ``JKToolKit.Spectre.AutoCompletion`` is an extension package for adding auto completion to your [Spectre.Console](https://github.com/spectreconsole/spectre.console) powered applications. </br>
 It comes with suggestions for Options and Branches out of the box, but you can also add your own suggestions for option and argument values.
