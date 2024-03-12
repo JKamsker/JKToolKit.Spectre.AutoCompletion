@@ -159,3 +159,8 @@ public class LionCommand : Command<LionSettings>, IAsyncCommandCompletable
 
 
 There is a working [example of the AutoCompletion feature](src/samples/AutoCompletionExample/Program.cs) demonstrating this.
+
+</br>
+<p align="center">
+Made with <span style="color: #e25555;">&hearts;</span> in Austria <img src="https://images.emojiterra.com/google/noto-emoji/v2.034/128px/1f1e6-1f1f9.png" width="20" height="20"/> 
+</p>
