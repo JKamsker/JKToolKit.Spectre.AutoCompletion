@@ -1,6 +1,14 @@
+
+
+<!-- assets\logo\logo_large.png as a center image 
+ -->
+<p align="center">
+  <img src="assets\logo\logo_large.png" alt="Spectre.Console AutoCompletion" width="200" />
+</p>
+
 # Spectre.Console AutoCompletion
 
-Spectre.Console.Cli includes auto completion for the shell.
+``JKToolKit.Spectre.AutoCompletion`` is an extension package for adding auto completion to your ``Spectre.Console`` powered applications. </br>
 It comes with suggestions for Options and Branches out of the box, but you can also add your own suggestions for option and argument values.
 
 - [Shell integrations](#shell-integrations)
