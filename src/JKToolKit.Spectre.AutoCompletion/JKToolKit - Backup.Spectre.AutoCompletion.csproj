@@ -7,9 +7,8 @@
 		<LangVersion>10.0</LangVersion>
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<PackageIcon>logo_small_128x128.png</PackageIcon>
-		<PackageReadmeFile>Readme.Nuget.md</PackageReadmeFile>
+		<PackageReadmeFile>Readme.md</PackageReadmeFile>
 		<PackageReleaseNotes />
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		
 	</PropertyGroup>
 
@@ -43,7 +42,7 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<None Include="..\..\Readme.Nuget.md">
+		<None Include="..\..\Readme.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
