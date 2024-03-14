@@ -43,6 +43,11 @@ It comes with suggestions for Options and Branches out of the box, but you can a
 The extension can be enabled using the `AddAutoCompletion` method on the `Configurator` object.
 
 ```csharp
+using JKToolKit.Spectre.AutoCompletion.Completion;
+using JKToolKit.Spectre.AutoCompletion.Integrations;
+
+//... 
+
 public static void Main(string[] args)
 {
     var app = new CommandApp();
@@ -57,6 +62,8 @@ public static void Main(string[] args)
     ) ;
 }
 ```
+
+Hint: If you are using a custom `ITypeRegistrar` or `ITypeResolver`, make sure, that the `ITypeResolver` resolves itself correctly. Or use the [JKToolKit.Spectre.Console.Extensions.Hosting-ng](https://github.com/JKamsker/Spectre.Console.Extensions.Hosting-ng) package
 
 ## Shell integrations
 1. [PowerShell](#powershell)
