@@ -63,8 +63,6 @@ public static void Main(string[] args)
 }
 ```
 
-Hint: If you are using a custom `ITypeRegistrar` or `ITypeResolver`, make sure, that the `ITypeResolver` resolves itself correctly. Or use the [JKToolKit.Spectre.Console.Extensions.Hosting-ng](https://github.com/JKamsker/Spectre.Console.Extensions.Hosting-ng) package
-
 ## Shell integrations
 1. [PowerShell](#powershell)
 3. More to come...

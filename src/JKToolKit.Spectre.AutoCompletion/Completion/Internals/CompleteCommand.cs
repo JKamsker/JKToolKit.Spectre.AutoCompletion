@@ -13,7 +13,6 @@ using System.Text;
 
 namespace JKToolKit.Spectre.AutoCompletion.Completion.Internals;
 
-
 public sealed class CompleteCommandSettings : CommandSettings
 {
     [CommandArgument(0, "[commandToComplete]")]
@@ -38,7 +37,7 @@ public sealed class CompleteCommandSettings : CommandSettings
 #if NET5_0_OR_GREATER
         var allowedFormats = new[] { "plain", "json", };
 #else
-            var allowedFormats = new[] { "plain", };
+        var allowedFormats = new[] { "plain", };
 #endif
         if (!allowedFormats.Contains(Format, StringComparer.OrdinalIgnoreCase))
         {
@@ -59,13 +58,17 @@ public sealed partial class CompleteCommand : AsyncCommand<CompleteCommandSettin
     public CompleteCommand
     (
         DefaultTypeResolver? resolver1 = default,
-        ITypeResolver? resolver2 = default
+        ITypeResolver? resolver2 = default,
+        IConfiguration? configuration = default
     )
     {
-        ITypeResolver resolver = resolver1 ?? resolver2 ?? throw new ArgumentNullException(nameof(resolver1));
+        ITypeResolver? resolver = resolver1 ?? resolver2 ?? TryBuildResolverFromConfiguration(configuration);
 
-        var configuration = resolver.Resolve(typeof(IConfiguration)) as IConfiguration;
-        var commandModel = resolver.Resolve(typeof(CommandModel)) as CommandModel;
+        CommandModel? commandModel = resolver.Resolve(typeof(CommandModel)) as CommandModel;
+        if (configuration is null)
+        {
+            configuration = resolver.Resolve(typeof(IConfiguration)) as IConfiguration;
+        }
 
         _model = commandModel ?? throw new ArgumentNullException(nameof(commandModel));
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
@@ -74,8 +77,36 @@ public sealed partial class CompleteCommand : AsyncCommand<CompleteCommandSettin
         _writer = configuration.Settings.Console.GetConsole();
     }
 
+    private static ITypeResolver TryBuildResolverFromConfiguration(IConfiguration? configuration)
+    {
+        ITypeResolver? resolver;
+        if (configuration is null)
+        {
+            throw new ArgumentNullException(nameof(configuration));
+        }
 
+        var registrar = configuration.Settings.Registrar as TypeRegistrar;
+        if (registrar is null)
+        {
+            throw new ArgumentNullException(nameof(registrar));
+        }
 
+        //var reg = registrar._registrar;
+        var field = registrar.GetType().GetField("_registrar", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (field is null)
+        {
+            throw new ArgumentNullException(nameof(field));
+        }
+
+        var reg = field.GetValue(registrar) as ITypeRegistrar;
+        if (reg is null)
+        {
+            throw new ArgumentNullException(nameof(reg));
+        }
+
+        resolver = reg.Build();
+        return resolver;
+    }
 
     public override async Task<int> ExecuteAsync(
         CommandContext context,
@@ -298,10 +329,10 @@ public sealed partial class CompleteCommand : AsyncCommand<CompleteCommandSettin
                 continue;
             }
 
-             // var completions = await CompleteCommandOption(
-             // context.Parent,
-             // parameter.Parameter,
-             // parameter.Value);
+            // var completions = await CompleteCommandOption(
+            // context.Parent,
+            // parameter.Parameter,
+            // parameter.Value);
             var completions = await CompleteCommandOption(context, parameter);
 
             if (completions == null || !completions.Suggestions.Any())

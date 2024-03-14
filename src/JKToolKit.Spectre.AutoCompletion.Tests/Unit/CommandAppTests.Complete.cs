@@ -1,10 +1,13 @@
+using JKToolKit.Spectre.AutoCompletion.Tests.Utilities.DependencyInjection;
+
+using Microsoft.Extensions.DependencyInjection;
+
 using Spectre.Console.Cli;
 using Spectre.Console.Cli.Tests.Data.Commands;
 using Spectre.Console.Testing;
 using Spectre.Console.Tests.Data;
 
 namespace Spectre.Console.Tests.Unit.Cli;
-
 
 public sealed partial class CommandAppTests
 {
@@ -1232,5 +1235,35 @@ public sealed partial class CommandAppTests
         //    Assert.Equal("dotnet", args.Runtime);
         //    Assert.Equal("C:\\Users\\Tool.dll", args.Command);
         //}
+
+        [Fact]
+        public void CustomTypeResolver_Works()
+        {
+            var services = new ServiceCollection();
+            var customRegistry = new CustomTypeRegistrar(services);
+
+            var fixture = new CommandAppTester(customRegistry);
+            fixture.Configure(config =>
+            {
+                config.AddAutoCompletion();
+                config.SetApplicationName("myapp");
+                config.PropagateExceptions();
+
+                config.AddBranch("user", feline =>
+                {
+                    feline.AddCommand<UserAddCommand>("add");
+                    feline.AddCommand<UserSuperAddCommand>("superAdd");
+                });
+            });
+
+            var commandToRun = Constants.CompleteCommand
+              .Append("\"myapp user superAdd Josh --gender male \"");
+
+            // When
+            var result = fixture.Run(commandToRun.ToArray());
+
+            // Then
+            Assert.Equal("--age", result.Output);
+        }
     }
 }
