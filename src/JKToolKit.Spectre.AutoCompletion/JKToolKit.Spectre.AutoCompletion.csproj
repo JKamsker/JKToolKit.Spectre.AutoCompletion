@@ -6,11 +6,10 @@
 		<Nullable>enable</Nullable>
 		<LangVersion>10.0</LangVersion>
 		<PlatformTarget>AnyCPU</PlatformTarget>
-		<PackageIcon>logo_small_128x128.png</PackageIcon>
-		<PackageReadmeFile>Readme.Nuget.md</PackageReadmeFile>
-		<PackageReleaseNotes />
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		
+		<PackageReleaseNotes />
+		<Version>0.0.6</Version>
+
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -64,11 +63,12 @@
 		<PackageOutputPath>$(SolutionDir)\..\.artifacts\</PackageOutputPath>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 
-		<Version>0.0.5</Version>
 		<Deterministic>True</Deterministic>
 
-		
-		
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIcon>logo_small_128x128.png</PackageIcon>
+		<PackageReadmeFile>Readme.Nuget.md</PackageReadmeFile>
+
 		<!-- Symbols -->
 		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>

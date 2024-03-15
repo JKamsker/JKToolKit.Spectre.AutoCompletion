@@ -132,15 +132,15 @@ public class LionCommand : Command<LionSettings>, IAsyncCommandCompletable
         return 0;
     }
 
-    public async Task<CompletionResult> GetSuggestionsAsync(ICommandParameterInfo parameter, string? prefix)
+    public async Task<CompletionResult> GetSuggestionsAsync(IMappedCommandParameter parameter, ICompletionContext context)
     {
-        if(string.IsNullOrEmpty(prefix))
+        if (string.IsNullOrEmpty(parameter.Value))
         {
             return CompletionResult.None();
         }
 
         return await this.MatchAsync()
-            .Add(x => x.Age, (prefix) =>
+            .Add(x => x.Legs, (prefix) =>
             {
                 if (prefix.Length != 0)
                 {
@@ -148,6 +148,15 @@ public class LionCommand : Command<LionSettings>, IAsyncCommandCompletable
                 }
 
                 return "16";
+            })
+            .Add(x => x.Teeth, (prefix) =>
+            {
+                if (prefix.Length != 0)
+                {
+                    return FindNextEvenNumber(prefix);
+                }
+
+                return "32";
             })
             .Add(x => x.Name, prefix =>
             {
@@ -165,7 +174,7 @@ public class LionCommand : Command<LionSettings>, IAsyncCommandCompletable
 
                 return new CompletionResult(bestMatches, bestMatches.Any());
             })
-            .MatchAsync(parameter, prefix)
+            .MatchAsync(parameter)
             .WithPreventDefault();
     }
 }
