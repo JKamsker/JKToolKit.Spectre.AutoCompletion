@@ -366,3 +366,5 @@ appsettings.Development.json
 
 
 build/.bin/
+
+src/.idea/

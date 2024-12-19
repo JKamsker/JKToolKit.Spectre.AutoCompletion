@@ -1,5 +1,6 @@
 using JKToolKit.Spectre.AutoCompletion.Completion;
 using JKToolKit.Spectre.AutoCompletion.Completion.Internals;
+using JKToolKit.Spectre.AutoCompletion.Helpers;
 
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -112,6 +113,8 @@ public sealed partial class CompleteCommand : AsyncCommand<CompleteCommandSettin
         CommandContext context,
         CompleteCommandSettings settings)
     {
+        using var _ = OutputEncodingHelper.SetOutputEncodingIfNeccessary();
+
         HighjackConsoles();
 
         if (settings.Server)

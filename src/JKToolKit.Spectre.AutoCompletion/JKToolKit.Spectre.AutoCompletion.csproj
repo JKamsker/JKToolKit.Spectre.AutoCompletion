@@ -1,14 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<LangVersion>10.0</LangVersion>
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		
-		<PackageReleaseNotes />
-		<Version>0.0.6</Version>
+		<Version>0.0.8</Version>
+		<PackageReleaseNotes>
+			Fixing potential encoding issues
+		</PackageReleaseNotes>
 
 	</PropertyGroup>
 
@@ -73,6 +75,8 @@
 		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		
+		<!-- Add code -->
+		<IncludeSource>True</IncludeSource>
 	</PropertyGroup>
 
 
