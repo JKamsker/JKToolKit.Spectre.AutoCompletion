@@ -30,7 +30,7 @@ public static class Extensions
         return new CommandParameterMatcher<TSettings>();
     }
 
-    public static IConfigurator AddAutoCompletion(this IConfigurator configurator, Action<IConfigurator<CommandSettings>>? action = null)
+    public static IConfigurator AddAutoCompletion(this IConfigurator configurator, Action<AutoCompletionConfiguration>? action = null)
     {
         configurator.AddBranch("completion", complete =>
         {
@@ -38,7 +38,8 @@ public static class Extensions
 
             if (action is not null)
             {
-                action(complete);
+                var configuration = new AutoCompletionConfiguration(complete);
+                action(configuration);
             }
         });
 

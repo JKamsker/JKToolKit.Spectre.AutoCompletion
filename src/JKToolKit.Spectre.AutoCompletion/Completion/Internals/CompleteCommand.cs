@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
+using JKToolKit.Spectre.AutoCompletion.Attributes;
 
 namespace JKToolKit.Spectre.AutoCompletion.Completion.Internals;
 

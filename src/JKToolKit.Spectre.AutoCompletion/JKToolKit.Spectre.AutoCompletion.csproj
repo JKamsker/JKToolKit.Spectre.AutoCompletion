@@ -7,7 +7,7 @@
 		<LangVersion>10.0</LangVersion>
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		
-		<Version>0.0.8</Version>
+		<Version>0.0.9</Version>
 		<PackageReleaseNotes>
 			Fixing potential encoding issues
 		</PackageReleaseNotes>

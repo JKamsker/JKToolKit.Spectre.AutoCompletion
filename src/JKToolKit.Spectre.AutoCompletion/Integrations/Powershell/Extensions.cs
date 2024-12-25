@@ -1,18 +1,17 @@
-﻿using JKToolKit.Spectre.AutoCompletion.Helpers;
+﻿using JKToolKit.Spectre.AutoCompletion.Completion;
+using JKToolKit.Spectre.AutoCompletion.Helpers;
 using Spectre.Console.Cli;
-using System.Runtime.InteropServices;
-using System.Text;
 
-namespace JKToolKit.Spectre.AutoCompletion.Integrations;
+namespace JKToolKit.Spectre.AutoCompletion.Integrations.Powershell;
 
 public static class Extensions
 {
-    public static IConfigurator<CommandSettings> AddPowershell(
-        this IConfigurator<CommandSettings> settings,
+    public static AutoCompletionConfiguration AddPowershell(
+        this AutoCompletionConfiguration settings,
         Action<PowershellIntegrationOptions>? configure = null
     )
     {
-        settings.AddDelegate<PowershellSettings>("powershell", (context, pwsh) =>
+        settings.SpectreConfig.AddDelegate<PowershellSettings>("powershell", (context, pwsh) =>
         {
             var options = new PowershellIntegrationOptions();
             configure?.Invoke(options);

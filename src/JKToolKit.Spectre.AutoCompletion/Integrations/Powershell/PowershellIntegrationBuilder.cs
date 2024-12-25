@@ -143,42 +143,7 @@ public static class PowershellIntegrationBuilder
 
         return sb.ToString();
     }
-
-    // removes everything after a comment in a line
-    // removes empty lines (whitespace also counts as empty)
-    // private static void Cleanup(StringBuilder sb)
-    // {
-    //     for (int i = 0; i < sb.Length; i++)
-    //     {
-    //         if (sb[i] == '#')
-    //         {
-    //             var nextLineBreak = sb.IndexOf('\n', i);
-    //             var length = nextLineBreak == -1 
-    //                 ? sb.Length - i 
-    //                 : nextLineBreak - i;
-    //             
-    //             sb.Remove(i, length);
-    //         }
-    //     }
-    //     
-    //     // Remove empty lines (whitespace also counts as empty)
-    //     for (int i = 0; i < sb.Length; i++)
-    //     {
-    //         var indexOfLineBreak = sb.IndexOf('\n', i);
-    //         if (indexOfLineBreak == -1)
-    //         {
-    //             break;
-    //         }
-    //         
-    //         var isWhitespace = sb.IsWhiteSpace(i, indexOfLineBreak);
-    //         if (isWhitespace)
-    //         {
-    //             sb.Remove(i, indexOfLineBreak - i);
-    //         }
-    //     }
-    // }
-
-
+    
     private static string GetResource(byte[] powershellIntegration_Install, Dictionary<string, string> replacements)
     {
         var result = Encoding.UTF8.GetString(powershellIntegration_Install);

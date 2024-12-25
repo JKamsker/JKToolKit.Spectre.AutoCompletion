@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using JKToolKit.Spectre.AutoCompletion.Attributes;
 using JKToolKit.Spectre.AutoCompletion.Completion;
 using Spectre.Console.Cli;
 

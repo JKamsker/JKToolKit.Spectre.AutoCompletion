@@ -2,6 +2,7 @@
 using Spectre.Console.Cli;
 using System.Diagnostics;
 using JKToolKit.Spectre.AutoCompletion.Integrations;
+using JKToolKit.Spectre.AutoCompletion.Integrations.Powershell;
 
 namespace AutoCompletionExample;
 
