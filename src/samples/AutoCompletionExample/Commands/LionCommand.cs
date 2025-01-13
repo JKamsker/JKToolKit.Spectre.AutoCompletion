@@ -10,13 +10,16 @@ public class LionCommand : Command<LionCommand.LionSettings>, IAsyncCommandCompl
 {
     public class LionSettings : CommandSettings
     {
-        [CommandArgument(0, "<TEETH>")]
+        [CommandArgument(0, "[LEGS]")]
+        // [CommandOption("-l|--legs <LEGS>")]
+        [Description("The number of legs.")]
+        public int Legs { get; set; }
+
+        //[CommandArgument(0, "<TEETH>")]
+        [CommandOption("-t|--teeth <TEETH>")]
         [Description("The number of teeth the lion has.")]
         public int Teeth { get; set; }
 
-        [CommandArgument(1, "[LEGS]")]
-        [Description("The number of legs.")]
-        public int Legs { get; set; }
 
         [CommandOption("-c <CHILDREN>")]
         [Description("The number of children the lion has.")]
@@ -34,18 +37,26 @@ public class LionCommand : Command<LionCommand.LionSettings>, IAsyncCommandCompl
         [CompletionSuggestions("10", "15", "20", "30")]
         public int Age { get; set; }
     }
-    
+
     public override int Execute(CommandContext context, LionSettings settings)
     {
+        Console.WriteLine("Executing LionCommand with the following settings:");
+        Console.WriteLine($"Teeth: {settings.Teeth}");
+        Console.WriteLine($"Legs: {settings.Legs}");
+        Console.WriteLine($"Children: {settings.Children}");
+        Console.WriteLine($"HuntDays: {string.Join(", ", settings.HuntDays)}");
+        Console.WriteLine($"Name: {settings.Name}");
+        Console.WriteLine($"Age: {settings.Age}");
+
         return 0;
     }
 
     public async Task<CompletionResult> GetSuggestionsAsync(IMappedCommandParameter parameter, ICompletionContext context)
     {
-        if (string.IsNullOrEmpty(parameter.Value))
-        {
-            return CompletionResult.None();
-        }
+        // if (string.IsNullOrEmpty(parameter.Value))
+        // {
+        //     return CompletionResult.None();
+        // }
 
         return await this.MatchAsync()
             .Add(x => x.Legs, (prefix) =>
@@ -55,7 +66,8 @@ public class LionCommand : Command<LionCommand.LionSettings>, IAsyncCommandCompl
                     return FindNextEvenNumber(prefix);
                 }
 
-                return "16";
+                // return "16";
+                return new CompletionResult(EvenNumbers().Take(20).Select(x => x.ToString()).ToList(), true);
             })
             .Add(x => x.Teeth, (prefix) =>
             {
@@ -64,7 +76,7 @@ public class LionCommand : Command<LionCommand.LionSettings>, IAsyncCommandCompl
                     return FindNextEvenNumber(prefix);
                 }
 
-                return "32";
+                return new CompletionResult(EvenNumbers().Take(20).Select(x => x.ToString()).ToList(), true);
             })
             .Add(x => x.Name, prefix =>
             {
@@ -86,9 +98,23 @@ public class LionCommand : Command<LionCommand.LionSettings>, IAsyncCommandCompl
             .WithPreventDefault();
     }
 
+    private IEnumerable<int> EvenNumbers()
+    {
+        for (var i = 0; i < int.MaxValue; i += 2)
+        {
+            yield return i;
+        }
+    }
+
     private static string FindNextEvenNumber(string input)
     {
         var number = int.Parse(input); // Parse the input string to an integer
+        var isEven = number % 2 == 0; // Check if the number is even
+        if (isEven)
+        {
+            return input;
+        }
+
 
         // Find the next even number greater than the input number
         var nextEvenNumber = number + (2 - (number % 2));

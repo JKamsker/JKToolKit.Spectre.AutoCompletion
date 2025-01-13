@@ -54,7 +54,7 @@ public static class Extensions
         /// <param name="alias">fore eg: "mbbl"</param>
         /// <param name="command">for eg: ["branch1", "branch2", "--lol"]</param>
         /// <returns></returns>
-        public PowershellIntegrationOptions WithAlias(string alias, string[] command)
+        public PowershellIntegrationOptions WithAlias(string alias, string[]? command = null)
         {
             Aliases.Add(new PowershellIntegrationAlias(alias, command));
             return this;

@@ -1,3 +1,5 @@
+using JKToolKit.Spectre.AutoCompletion.Attributes;
+
 namespace Spectre.Console.Cli.Tests.Data.Commands;
 
 // mycommand user add [name] --age [age]

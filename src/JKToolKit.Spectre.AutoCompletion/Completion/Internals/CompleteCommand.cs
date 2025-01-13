@@ -13,6 +13,11 @@ using System.Reflection;
 using System.Text;
 using JKToolKit.Spectre.AutoCompletion.Attributes;
 
+#if NET8_0_OR_GREATER
+using System.Text.Json;
+#endif
+
+
 namespace JKToolKit.Spectre.AutoCompletion.Completion.Internals;
 
 public sealed class CompleteCommandSettings : CommandSettings
@@ -130,6 +135,7 @@ public sealed partial class CompleteCommand : AsyncCommand<CompleteCommandSettin
 
     private async Task RunCompletionSimple(CompleteCommandSettings settings)
     {
+        // Debugger.Launch();
         var commandToComplete = settings.CommandToComplete;
         if (string.IsNullOrEmpty(commandToComplete))
         {
@@ -147,6 +153,13 @@ public sealed partial class CompleteCommand : AsyncCommand<CompleteCommandSettin
     private void RenderCompletion(CompletionResultItem[] completions, CompleteCommandSettings settings)
     {
 #if NET5_0_OR_GREATER
+
+        File.AppendAllText("completion.log.jsonl", JsonSerializer.Serialize(new
+        {
+            Settings = settings,
+            Completions = completions
+        }) + "\n");
+
         if (string.Equals(settings.Format, "json", StringComparison.OrdinalIgnoreCase))
         {
             _writer.Write(JsonSingleLineRenderable.Create(completions));

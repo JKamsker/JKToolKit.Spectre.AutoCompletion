@@ -1,72 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using JKToolKit.Spectre.AutoCompletion.Helpers;
+﻿using System.Text;
 using JKToolKit.Spectre.AutoCompletion.Properties;
 
-public class StartArgs
-{
-    public string Runtime { get; }
-    public string Command { get; }
-
-    public string CommandName => Path.GetFileNameWithoutExtension(Command);
-
-    public string CommandExtension => Path.GetExtension(Command);
-
-    public StartArgs(string runtime, string command)
-    {
-        Runtime = runtime;
-        Command = command;
-    }
-
-    public override string ToString()
-    {
-        if (string.IsNullOrEmpty(Runtime))
-        {
-            return Command;
-        }
-
-        return string.Join(" ", Runtime, Command);
-    }
-
-    public static StartArgs ParseStartArgs(params string[] args)
-    {
-        var command = args[0];
-        if (command.EndsWith(".dll"))
-        {
-            return new StartArgs("dotnet", command);
-        }
-
-        var commandIsDotnet = Path.GetFileNameWithoutExtension(command)
-            .Equals("dotnet", StringComparison.OrdinalIgnoreCase);
-
-        if (commandIsDotnet)
-        {
-            return new StartArgs(command, args[1]);
-        }
-
-        return new StartArgs(string.Empty, args[0]);
-    }
-
-    public static StartArgs GetSelfStartCommandFromCommandLineArgs()
-    {
-        var args = Environment.GetCommandLineArgs();
-        return ParseStartArgs(args);
-    }
-}
-
-public record PowershellIntegrationAlias(string Alias, string[] Command);
-
-public class PowershellIntegrationBuilderSettings
-{
-    public bool Diagnostic { get; set; }
-
-    public bool Install { get; set; }
-    public StartArgs? StartArgs { get; set; }
-
-    public List<PowershellIntegrationAlias> Aliases { get; set; } = new();
-}
+namespace JKToolKit.Spectre.AutoCompletion.Integrations.Powershell;
 
 public static class PowershellIntegrationBuilder
 {
@@ -120,6 +55,31 @@ public static class PowershellIntegrationBuilder
         }
 
         var sb = new StringBuilder();
+
+        if (settings.Aliases?.Count > 0)
+        {
+            /*# Globals:
+                $global:aliases = @{
+                "myls" = "my ls"
+                "mylion" = "my lion"
+                "my" = ""
+            }*/
+
+            var globals = settings.Aliases
+                .Where(alias => alias.Command?.Length > 0)
+                .Select(alias => $"\t\"{alias.Alias}\" = {alias.MakeGlobalAliasValue()}");
+
+            sb.AppendLine("$global:aliases = @{");
+            foreach (var global in globals)
+            {
+                sb
+                    .AppendLine(global);
+            }
+
+            sb.AppendLine("}");
+        }
+
+
         sb.AppendLine(GetResource(Resources.PowershellIntegration_Completion_and_alias, replacements));
         if (settings.Install)
         {
@@ -130,20 +90,35 @@ public static class PowershellIntegrationBuilder
         {
             foreach (var alias in settings.Aliases)
             {
+                if (true || alias.Command?.Length is null or 0)
+                {
+                    // Set-alias -name AutoCompletionExample -Value Invoke-AutoCompletionExample
+                    // Register-CompleterFor -name "AutoCompletionExample"
+
+                    // Set-alias -name [APPNAME] -Value Invoke-[APPNAME]
+
+                    sb.AppendLine($"Set-alias -name {alias.Alias} -Value Invoke-{startArgs.CommandName}");
+                    sb.AppendLine($"Register-CompleterFor -name \"{alias.Alias}\"");
+
+                    continue;
+                }
+
                 sb.AppendLine(GetResource(Resources.PowershellIntegration_alias, new Dictionary<string, string>
                 {
                     ["[ALIAS_NAME]"] = alias.Alias,
-                    ["[PARAMS]"] = string.Join(" ", alias.Command),
+                    ["[PARAMS]"] = alias.Command == null
+                        ? string.Empty
+                        : string.Join(" ", alias.Command),
+
                     ["[INVOKE_NAME]"] =
                         $"Invoke-{startArgs.CommandName}" // e.g. Invoke-AutoCompletionExample from PowershellIntegration_Completion_and_alias
                 }));
             }
         }
 
-
         return sb.ToString();
     }
-    
+
     private static string GetResource(byte[] powershellIntegration_Install, Dictionary<string, string> replacements)
     {
         var result = Encoding.UTF8.GetString(powershellIntegration_Install);

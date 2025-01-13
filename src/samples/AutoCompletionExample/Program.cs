@@ -1,8 +1,7 @@
 ﻿using JKToolKit.Spectre.AutoCompletion.Completion;
+using JKToolKit.Spectre.AutoCompletion.Integrations.Powershell;
 using Spectre.Console.Cli;
 using System.Diagnostics;
-using JKToolKit.Spectre.AutoCompletion.Integrations;
-using JKToolKit.Spectre.AutoCompletion.Integrations.Powershell;
 
 namespace AutoCompletionExample;
 
@@ -14,6 +13,7 @@ namespace AutoCompletionExample;
 //
 // Test completing:
 // - .\AutoCompletionExample.exe cli complete "myapp Li"
+
 internal static class Program
 {
     private static void Main(string[] args)
@@ -21,8 +21,13 @@ internal static class Program
         // If we just want to test the completion with f5 in visual studio
         if (Debugger.IsAttached)
         {
-            args = new[] { "completion", "complete", "\"myapp Li\"" };
+            // args = new[] { "completion", "complete", "\"myapp Li\"" };
+
+            // completion complete --position 16 my lion --teeth 
+            args = new[] { "completion", "complete", "--position", "16", "my lion --teeth " };
         }
+
+        LogToFile(args);
 
         var app = new CommandApp();
         app.Configure
@@ -30,17 +35,58 @@ internal static class Program
             config =>
             {
                 config
-                    .AddAutoCompletion(x => x.AddPowershell(opts => { opts.WithAlias("myls", [ "ls" ]); }))
+                    .AddAutoCompletion(x => x.AddPowershell(opts => opts
+                        .WithAlias("myls", ["ls"])
+                        .WithAlias("my")
+                        .WithAlias("mylion", ["lion"])
+                        .WithAlias("clion", ["lion", "5"])
+                    ))
                     .AddCommand<LionCommand>("lion")
                     ;
 
                 config.AddCommand<LsCommand>("ls")
                     .WithDescription("List files and directories in the current directory.");
+
+                config.PropagateExceptions();
             }
         );
 
-        app.Run(args);
+        try
+        {
+            app.Run(args);
+        }
+        catch (Exception ex)
+        {
+            if (Debugger.IsAttached)
+            {
+                throw;
+            }
+
+            File.AppendAllText("Error.txt", ex.ToString() +
+                                            "\n-------------------\n");
+        }
     }
+
+    private static void LogToFile(string[] args)
+    {
+        if (Debugger.IsAttached)
+        {
+            return;
+        }
+
+        var myargs = args
+            .Select(x => x.Contains(" ") ? $"\"{x}\"" : x);
+
+        var log = string.Join(" ", myargs);
+        System.IO.File.AppendAllText("log.txt", log + "\n");
+    }
+
+    // log stdout to file
+    //private static void LogStdoutToFile()
+    //{
+    //    var stdout = new System.IO.StreamWriter("stdout.txt");
+    //    System.Console.SetOut(stdout);
+    //}
 }
 
 /*

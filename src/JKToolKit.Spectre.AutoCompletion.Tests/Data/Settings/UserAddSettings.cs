@@ -1,4 +1,4 @@
-using JKToolKit.Spectre.AutoCompletion.Completion;
+using JKToolKit.Spectre.AutoCompletion.Attributes;
 
 namespace Spectre.Console.Cli.Tests.Data.Commands;
 
