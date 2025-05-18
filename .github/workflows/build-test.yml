@@ -28,12 +28,6 @@ jobs:
           # List all files in the directory
           echo "Listing files in .github/package-versions"
 
-          ls -l
-          ls -l ..
-          ls -l ../.github
-          ls -l ../.github/package-versions
-
-
           if [ -f "../.github/package-versions/spectre-console-cli-versions.json" ]; then
             echo "Reading versions from file"
             VERSIONS=$(jq -c '.versions' ../.github/package-versions/spectre-console-cli-versions.json)

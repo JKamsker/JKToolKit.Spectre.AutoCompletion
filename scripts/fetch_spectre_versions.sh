@@ -6,7 +6,7 @@
 ALL_VERSIONS=$(curl -s "https://api.nuget.org/v3-flatcontainer/spectre.console.cli/index.json" | jq -r '.versions[]')
 
 # Get the last 20 versions (most recent when sorted)
-SELECTED_VERSIONS=$(echo "$ALL_VERSIONS" | sort -V | tail -n 20)
+SELECTED_VERSIONS=$(echo "$ALL_VERSIONS" | sort -V | tail -n 100)
 
 # Get the last 10 non-prerelease versions (those without hyphens)
 NON_PRERELEASE_VERSIONS=$(echo "$ALL_VERSIONS" | grep -v "-" | sort -V | tail -n 10)
