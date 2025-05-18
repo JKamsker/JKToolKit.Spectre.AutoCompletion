@@ -1,0 +1,99 @@
+# This workflow automatically checks for new Spectre.Console.Cli package versions daily
+# It stores the versions in a JSON file and only commits if there are changes
+# The build-test workflow will then use these versions for testing compatibility
+name: Update Spectre Package Versions
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight UTC
+  workflow_dispatch:      # Allow manual trigger
+
+jobs:
+  find-versions:
+    name: Find Package Versions
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+      
+      - name: Find Spectre.Console.Cli package versions
+        id: find_versions
+        run: |
+          # Use NuGet API to query all versions
+          ALL_VERSIONS=$(curl -s "https://api.nuget.org/v3-flatcontainer/spectre.console.cli/index.json" | jq -r '.versions[]')
+          
+          # Get the latest 2 major.minor release lines (e.g., 0.46.x, 0.47.x)
+          STABLE_VERSIONS=$(echo "$ALL_VERSIONS" | grep -v "-" | sort -V)
+          LATEST_MINOR_VERSIONS=$(echo "$STABLE_VERSIONS" | grep -o "^[0-9]\+\.[0-9]\+" | sort -V | uniq | tail -n 2)
+          
+          # Get the latest 2 preview versions
+          PREVIEW_VERSIONS=$(echo "$ALL_VERSIONS" | grep "-" | sort -V | tail -n 2)
+          
+          # For each release line, get the latest patch version
+          SELECTED_VERSIONS=""
+          for MINOR in $LATEST_MINOR_VERSIONS; do
+            LATEST_PATCH=$(echo "$STABLE_VERSIONS" | grep "^$MINOR\." | sort -V | tail -n 1)
+            SELECTED_VERSIONS="$SELECTED_VERSIONS $LATEST_PATCH"
+          done
+          
+          # Combine stable and preview versions
+          SELECTED_VERSIONS="$SELECTED_VERSIONS $PREVIEW_VERSIONS"
+          
+          echo "Selected versions: $SELECTED_VERSIONS"
+          
+          # Format versions into JSON array
+          echo '{ "versions": [' > versions.json
+          
+          # Add each version as a JSON string in the array
+          FIRST=true
+          for VERSION in $SELECTED_VERSIONS; do
+            if [ -z "$VERSION" ]; then
+              continue
+            fi
+            
+            if [ "$FIRST" = true ]; then
+              echo "  \"$VERSION\"" >> versions.json
+              FIRST=false
+            else
+              echo "  ,\"$VERSION\"" >> versions.json
+            fi
+          done
+          
+          echo '] }' >> versions.json
+          
+          # Output versions found
+          echo "Selected versions for testing:"
+          cat versions.json
+          
+          # Store in file
+          mkdir -p .github/package-versions
+          mv versions.json .github/package-versions/spectre-console-cli-versions.json
+      
+      - name: Check for changes
+        id: git-check
+        run: |
+          git add .github/package-versions/spectre-console-cli-versions.json
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes detected in versions"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in versions"
+          fi
+      
+      - name: Commit and push if changed
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git commit -m "Update Spectre.Console.Cli package versions"
+          git push
