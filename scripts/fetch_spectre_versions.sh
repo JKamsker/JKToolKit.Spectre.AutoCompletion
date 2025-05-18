@@ -8,14 +8,21 @@ ALL_VERSIONS=$(curl -s "https://api.nuget.org/v3-flatcontainer/spectre.console.c
 # Get the last 20 versions (most recent when sorted)
 SELECTED_VERSIONS=$(echo "$ALL_VERSIONS" | sort -V | tail -n 20)
 
-echo "Selected versions: $SELECTED_VERSIONS"
+# Get the last 10 non-prerelease versions (those without hyphens)
+NON_PRERELEASE_VERSIONS=$(echo "$ALL_VERSIONS" | grep -v "-" | sort -V | tail -n 10)
+
+echo "Selected recent versions: $SELECTED_VERSIONS"
+echo "Selected non-prerelease versions: $NON_PRERELEASE_VERSIONS"
+
+# Combine both lists and remove duplicates
+COMBINED_VERSIONS=$(echo "$SELECTED_VERSIONS $NON_PRERELEASE_VERSIONS" | tr ' ' '\n' | sort -V | uniq)
 
 # Format versions into JSON array
 echo '{ "versions": [' > versions.json
 
 # Add each version as a JSON string in the array
 FIRST=true
-for VERSION in $SELECTED_VERSIONS; do
+for VERSION in $COMBINED_VERSIONS; do
   if [ -z "$VERSION" ]; then
     continue
   fi
@@ -31,7 +38,7 @@ done
 echo '] }' >> versions.json
 
 # Output versions found
-echo "Selected versions for testing:"
+echo "Combined unique versions for testing:"
 cat versions.json
 
 # Store in file
