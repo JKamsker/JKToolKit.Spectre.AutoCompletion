@@ -23,14 +23,9 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
-      
-      - name: Find Spectre.Console.Cli package versions
+        - name: Find Spectre.Console.Cli package versions
         id: find_versions
         run: |
-          # Install jq (needed for script)
-          sudo apt-get update
-          sudo apt-get install -y jq
-          
           # Use script to fetch versions
           bash ./scripts/fetch_spectre_versions.sh
       
