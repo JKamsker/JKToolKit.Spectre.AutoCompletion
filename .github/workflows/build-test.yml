@@ -30,13 +30,13 @@ jobs:
 
           ls -l
           ls -l ..
-          ls -l .github
-          ls -l .github/package-versions
+          ls -l ../.github
+          ls -l ../.github/package-versions
 
 
-          if [ -f ".github/package-versions/spectre-console-cli-versions.json" ]; then
+          if [ -f "../.github/package-versions/spectre-console-cli-versions.json" ]; then
             echo "Reading versions from file"
-            VERSIONS=$(jq -c '.versions' .github/package-versions/spectre-console-cli-versions.json)
+            VERSIONS=$(jq -c '.versions' ../.github/package-versions/spectre-console-cli-versions.json)
             echo "versions=$VERSIONS" >> $GITHUB_OUTPUT
           else
             echo "Using default versions"
