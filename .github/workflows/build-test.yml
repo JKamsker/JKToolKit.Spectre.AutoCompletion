@@ -15,13 +15,33 @@ defaults:
     working-directory: src
 
 jobs:
+  prepare-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.set-matrix.outputs.versions }}
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set matrix from file or fallback to defaults
+        id: set-matrix
+        run: |
+          if [ -f ".github/package-versions/spectre-console-cli-versions.json" ]; then
+            echo "Reading versions from file"
+            VERSIONS=$(jq -c '.versions' .github/package-versions/spectre-console-cli-versions.json)
+            echo "versions=$VERSIONS" >> $GITHUB_OUTPUT
+          else
+            echo "Using default versions"
+            DEFAULT_VERSIONS='["0.46.1-preview.0.19", "0.47.0", "0.48.0", "0.48.1-preview.0.35"]'
+            echo "versions=$DEFAULT_VERSIONS" >> $GITHUB_OUTPUT
+          fi
+
   build-and-test:
+    needs: prepare-matrix
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        spectre_version: ${{ fromJson(hashFiles('.github/package-versions/spectre-console-cli-versions.json') != '' && 
-                                      fromJson(readFile('.github/package-versions/spectre-console-cli-versions.json')).versions || 
-                                      '["0.46.1-preview.0.19", "0.47.0", "0.48.0", "0.48.1-preview.0.35"]') }}
+        spectre_version: ${{ fromJson(needs.prepare-matrix.outputs.versions) }}
+      fail-fast: false
 
     steps:
     - uses: actions/checkout@v3
