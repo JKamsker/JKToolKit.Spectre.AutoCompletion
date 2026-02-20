@@ -122,14 +122,41 @@ public static class PowershellIntegrationBuilder
     private static string GetResource(byte[] powershellIntegration_Install, Dictionary<string, string> replacements)
     {
         var result = Encoding.UTF8.GetString(powershellIntegration_Install);
-        return ApplyReplacements(replacements, result);
+        return ApplyReplacements(replacements, NormalizePowerShell(result));
     }
 
     private static string GetResource(string resourceName, Dictionary<string, string> replacements)
     {
         var result = Resources.ResourceManager.GetString(resourceName) ??
                      throw new InvalidOperationException($"Could not find resource '{resourceName}'.");
-        return ApplyReplacements(replacements, result);
+        return ApplyReplacements(replacements, NormalizePowerShell(result));
+    }
+
+    private static string NormalizePowerShell(string script)
+    {
+        if (string.IsNullOrEmpty(script))
+        {
+            return script;
+        }
+
+        // PowerShell 5.1 doesn't allow a pipeline to start with a pipe on a new line.
+        // Normalize those cases by joining them to the previous line.
+        var lines = script.Replace("\r\n", "\n").Split('\n');
+        var normalized = new List<string>(lines.Length);
+
+        foreach (var line in lines)
+        {
+            var trimmed = line.TrimStart();
+            if (trimmed.StartsWith("| ", StringComparison.Ordinal) && normalized.Count > 0)
+            {
+                normalized[normalized.Count - 1] = normalized[normalized.Count - 1] + " " + trimmed;
+                continue;
+            }
+
+            normalized.Add(line);
+        }
+
+        return string.Join(Environment.NewLine, normalized);
     }
 
     private static string ApplyReplacements(Dictionary<string, string> replacements, string result)
