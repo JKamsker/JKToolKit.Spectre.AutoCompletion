@@ -5,7 +5,9 @@ function Add-ProfileLine {
         [string]$Line
 
     )
-    $ProfilePath = $PROFILE.CurrentUserAllHosts
+    $ProfilePath = $null
+    try { $ProfilePath = $PROFILE.CurrentUserAllHosts } catch { }
+    if ([string]::IsNullOrWhiteSpace($ProfilePath)) { $ProfilePath = $PROFILE }
 
     # If not exists: Empty string array
     $ProfileContent = @()
@@ -53,7 +55,9 @@ function Add-Profile-Script {
         [string]$scriptContent
     )
 
-    $ProfilePath = $profile.CurrentUserAllHosts
+    $ProfilePath = $null
+    try { $ProfilePath = $PROFILE.CurrentUserAllHosts } catch { }
+    if ([string]::IsNullOrWhiteSpace($ProfilePath)) { $ProfilePath = $PROFILE }
     $ScriptsPath = Join-Path (Split-Path $ProfilePath) "Scripts"
     $ScriptPath = Join-Path $ScriptsPath "$identifier.ps1"
 
