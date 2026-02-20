@@ -11,7 +11,7 @@ public static class Extensions
         Action<PowershellIntegrationOptions>? configure = null
     )
     {
-        settings.SpectreConfig.AddDelegate<PowershellSettings>("powershell", (context, pwsh) =>
+        settings.SpectreConfig.AddDelegate<PowershellSettings>("powershell", (context, pwsh, cancellationToken) =>
         {
             var options = new PowershellIntegrationOptions();
             configure?.Invoke(options);

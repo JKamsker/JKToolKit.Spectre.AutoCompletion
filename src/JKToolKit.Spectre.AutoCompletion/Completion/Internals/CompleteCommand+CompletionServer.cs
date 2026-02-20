@@ -30,7 +30,7 @@ public partial class CompleteCommand
             try
             {
                 var args = GetLineParams(line);
-                var parser = new CommandCompletionContextParser(_model, _configuration);
+                var parser = new CommandCompletionContextParser(_model, _settings);
                 var ctx = parser.Parse(
                     args.Command,
                     args.CursorPosition);

@@ -12,10 +12,4 @@
 		<ProjectReference Include="..\..\JKToolKit.Spectre.AutoCompletion\JKToolKit.Spectre.AutoCompletion.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Spectre.Console" Version="0.49.2-preview.0.1" />
-		<PackageReference Include="Spectre.Console.Cli" Version="0.49.2-preview.0.1" />
-	</ItemGroup>
-
-
 </Project>

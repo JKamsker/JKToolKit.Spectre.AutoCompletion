@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Spectre.Console.Cli;
 using Spectre.Console.Cli.Tests.Data.Commands;
-using Spectre.Console.Testing;
+using Spectre.Console.Cli.Testing;
 using Spectre.Console.Tests.Data;
 
 namespace Spectre.Console.Tests.Unit.Cli;
