@@ -33,9 +33,9 @@ function Register-CompleterFor{
 
             $remainingCommands = $null;
             if($wordToComplete.CommandElements.Count -gt 1){
-                $remainingCommandsTmp = $wordToComplete.CommandElements[1..($wordToComplete.CommandElements.Count - 1)] 
-                        | Select-Object -ExpandProperty Extent 
-                        | Select-Object -ExpandProperty Text
+                $remainingCommandsTmp = $wordToComplete.CommandElements[1..($wordToComplete.CommandElements.Count - 1)] |
+                    Select-Object -ExpandProperty Extent |
+                    Select-Object -ExpandProperty Text
 
                 $remainingCommands = " $($remainingCommandsTmp -join " ")"
             }
