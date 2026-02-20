@@ -26,4 +26,8 @@ internal class HighjackedAnsiConsole : IAnsiConsole
     public void Write(IRenderable renderable)
     {
     }
+
+    public void WriteAnsi(Action<AnsiWriter> action)
+    {
+    }
 }

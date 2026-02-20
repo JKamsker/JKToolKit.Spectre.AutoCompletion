@@ -38,7 +38,7 @@ public class LionCommand : Command<LionCommand.LionSettings>, IAsyncCommandCompl
         public int Age { get; set; }
     }
 
-    public override int Execute(CommandContext context, LionSettings settings)
+    protected override int Execute(CommandContext context, LionSettings settings, CancellationToken cancellationToken)
     {
         Console.WriteLine("Executing LionCommand with the following settings:");
         Console.WriteLine($"Teeth: {settings.Teeth}");

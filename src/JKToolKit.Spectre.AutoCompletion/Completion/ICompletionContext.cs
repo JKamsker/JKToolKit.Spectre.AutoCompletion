@@ -1,5 +1,7 @@
 ﻿using Spectre.Console.Cli;
 
+using Spectre.Console.Cli.Help;
+
 namespace JKToolKit.Spectre.AutoCompletion.Completion;
 
 /// <summary>
@@ -20,7 +22,7 @@ public interface ICompletionContext
     /// <summary>
     /// Gets the parent command container.
     /// </summary>
-    ICommandContainer? Parent { get; }
+    ICommandInfo? Parent { get; }
 
     /// <summary>
     /// Gets the mapped parameters for the command.

@@ -5,7 +5,9 @@ function Add-ProfileLine {
         [string]$Line
 
     )
-    $ProfilePath = $PROFILE.CurrentUserAllHosts
+    $ProfilePath = $null
+    try { $ProfilePath = $PROFILE.CurrentUserAllHosts } catch { }
+    if ([string]::IsNullOrWhiteSpace($ProfilePath)) { $ProfilePath = $PROFILE }
 
     # If not exists: Empty string array
     $ProfileContent = @()
@@ -13,27 +15,24 @@ function Add-ProfileLine {
         $ProfileContent = [System.IO.File]::ReadAllLines($ProfilePath)
     }
 
-    # we need to remove Id: [identifier] and the line after it
+    # we need to remove Id: [identifier] and the line after it (if present)
     $IdLine = "#Id: $identifier"
-    # $IdLineIndex = $ProfileContent.IndexOf($IdLine)
-    if ($IdLineIndex -ne -1 -and $IdLineIndex -lt ($ProfileContent.Count - 1)) {
-        $newContent = @()
-        $switch = $false
-        for ($i = 0; $i -lt $ProfileContent.Count; $i++) {
-            $content = $ProfileContent[$i]
-            if ($content -eq $IdLine) {
-                $switch = $true
-                continue
-            }
-            if ($switch) {
-                $switch = $false
-                continue
-            }
-
-            $newContent += $content
+    $newContent = @()
+    $skipNext = $false
+    foreach ($content in $ProfileContent) {
+        if ($skipNext) {
+            $skipNext = $false
+            continue
         }
-        $ProfileContent = $newContent
+
+        if ($content -eq $IdLine) {
+            $skipNext = $true
+            continue
+        }
+
+        $newContent += $content
     }
+    $ProfileContent = $newContent
 
     # ProfileContent suddendly is a string instead of a string array
     # make it an array if it is a string
@@ -56,7 +55,9 @@ function Add-Profile-Script {
         [string]$scriptContent
     )
 
-    $ProfilePath = $profile.CurrentUserAllHosts
+    $ProfilePath = $null
+    try { $ProfilePath = $PROFILE.CurrentUserAllHosts } catch { }
+    if ([string]::IsNullOrWhiteSpace($ProfilePath)) { $ProfilePath = $PROFILE }
     $ScriptsPath = Join-Path (Split-Path $ProfilePath) "Scripts"
     $ScriptPath = Join-Path $ScriptsPath "$identifier.ps1"
 

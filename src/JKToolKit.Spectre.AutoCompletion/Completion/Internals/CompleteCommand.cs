@@ -4,11 +4,12 @@ using JKToolKit.Spectre.AutoCompletion.Helpers;
 
 using Spectre.Console;
 using Spectre.Console.Cli;
+using Spectre.Console.Cli.Completion;
+using Spectre.Console.Cli.Help;
 using Spectre.Console.Rendering;
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
 using JKToolKit.Spectre.AutoCompletion.Attributes;
@@ -57,67 +58,27 @@ public sealed class CompleteCommandSettings : CommandSettings
 
 public sealed partial class CompleteCommand : AsyncCommand<CompleteCommandSettings>
 {
-    private readonly CommandModel _model;
-    private readonly ITypeResolver _typeResolver;
+    private readonly ICommandModel _model;
+    private readonly ICommandAppSettings _settings;
+    private readonly ITypeResolverAccessor _resolverAccessor;
     private readonly IAnsiConsole _writer;
-    private readonly IConfiguration _configuration;
 
-    public CompleteCommand
-    (
-        DefaultTypeResolver? resolver1 = default,
-        ITypeResolver? resolver2 = default,
-        IConfiguration? configuration = default
-    )
+    public CompleteCommand(
+        ICommandModel model,
+        ICommandAppSettings settings,
+        ITypeResolverAccessor resolverAccessor,
+        IAnsiConsole writer)
     {
-        ITypeResolver? resolver = resolver1 ?? resolver2 ?? TryBuildResolverFromConfiguration(configuration);
-
-        CommandModel? commandModel = resolver.Resolve(typeof(CommandModel)) as CommandModel;
-        if (configuration is null)
-        {
-            configuration = resolver.Resolve(typeof(IConfiguration)) as IConfiguration;
-        }
-
-        _model = commandModel ?? throw new ArgumentNullException(nameof(commandModel));
-        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-
-        _typeResolver = resolver;
-        _writer = configuration.Settings.Console.GetConsole();
+        _model = model ?? throw new ArgumentNullException(nameof(model));
+        _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+        _resolverAccessor = resolverAccessor ?? throw new ArgumentNullException(nameof(resolverAccessor));
+        _writer = writer ?? throw new ArgumentNullException(nameof(writer));
     }
 
-    private static ITypeResolver TryBuildResolverFromConfiguration(IConfiguration? configuration)
-    {
-        ITypeResolver? resolver;
-        if (configuration is null)
-        {
-            throw new ArgumentNullException(nameof(configuration));
-        }
-
-        var registrar = configuration.Settings.Registrar as TypeRegistrar;
-        if (registrar is null)
-        {
-            throw new ArgumentNullException(nameof(registrar));
-        }
-
-        //var reg = registrar._registrar;
-        var field = registrar.GetType().GetField("_registrar", BindingFlags.NonPublic | BindingFlags.Instance);
-        if (field is null)
-        {
-            throw new ArgumentNullException(nameof(field));
-        }
-
-        var reg = field.GetValue(registrar) as ITypeRegistrar;
-        if (reg is null)
-        {
-            throw new ArgumentNullException(nameof(reg));
-        }
-
-        resolver = reg.Build();
-        return resolver;
-    }
-
-    public override async Task<int> ExecuteAsync(
+    protected override async Task<int> ExecuteAsync(
         CommandContext context,
-        CompleteCommandSettings settings)
+        CompleteCommandSettings settings,
+        CancellationToken cancellationToken)
     {
         using var _ = OutputEncodingHelper.SetOutputEncodingIfNeccessary();
 
@@ -143,7 +104,7 @@ public sealed partial class CompleteCommand : AsyncCommand<CompleteCommandSettin
             _writer.WriteLine(_model.ApplicationName ?? string.Empty, Style.Plain);
         }
 
-        var parser = new CommandCompletionContextParser(_model, _configuration);
+        var parser = new CommandCompletionContextParser(_model, _settings);
         var ctx = parser.Parse(settings.CommandToComplete, settings.Position);
 
         var completions = await GetCompletionsAsync(ctx);
@@ -243,15 +204,15 @@ public sealed partial class CompleteCommand : AsyncCommand<CompleteCommandSettin
             .ToArray();
     }
 
-    private CompletionResult GetChildCommands(string partialElement, CommandInfo? parent)
+    private CompletionResult GetChildCommands(string partialElement, ICommandInfo? parent)
     {
-        var children = parent?.Children ?? _model.Commands;
+        var children = parent?.Commands ?? _model.Commands;
         return GetSuggestions(partialElement, children);
     }
 
     private static CompletionResult GetSuggestions(
         string? partialElement,
-        IEnumerable<CommandInfo> commands)
+        IEnumerable<ICommandInfo> commands)
     {
         return commands
             .Where(cmd => !cmd.IsHidden)
@@ -273,7 +234,7 @@ public sealed partial class CompleteCommand : AsyncCommand<CompleteCommandSettin
 
         var mappedLongNames = context.MappedParameters
             .Select(x => x.Parameter)
-            .OfType<CommandOption>()
+            .OfType<ICommandOption>()
             .SelectMany(x => x.LongNames)
             .Select(x => $"--{x}")
             .ToArray();
@@ -284,7 +245,7 @@ public sealed partial class CompleteCommand : AsyncCommand<CompleteCommandSettin
             var startsWithDash = context.PartialElement.StartsWith("-");
             var isEmpty = string.IsNullOrEmpty(context.PartialElement);
 
-            if (parameter is CommandOption commandOptionParameter && (startsWithDash || isEmpty))
+            if (parameter is ICommandOption commandOptionParameter && (startsWithDash || isEmpty))
             {
                 // Add all matching long parameter names
                 var completions = commandOptionParameter.LongNames
@@ -372,14 +333,17 @@ public sealed partial class CompleteCommand : AsyncCommand<CompleteCommandSettin
 
     private async Task<CompletionResult?> CompleteCommandOption(
         CommandCompletionContext context,
-        MappedCommandParameter mappedParameter
+        CommandLineMappedParameter mappedParameter
     )
     {
         var parameter = mappedParameter.Parameter;
         var partialElement = mappedParameter.Value ?? string.Empty;
 
-        var valuesViaAttributes =
-            parameter.Property.GetCustomAttributes<CompletionSuggestionsAttribute>();
+        var property = context.SettingsType?.GetProperty(parameter.PropertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        var valuesViaAttributes = property?.GetCustomAttributes(typeof(CompletionSuggestionsAttribute), true)
+            .OfType<CompletionSuggestionsAttribute>()
+            .ToArray();
+
         if (valuesViaAttributes?.Any() == true)
         {
             var values = valuesViaAttributes
@@ -393,7 +357,7 @@ public sealed partial class CompleteCommand : AsyncCommand<CompleteCommandSettin
             return new(values, true);
         }
 
-        var commandType = context.Parent?.CommandType;
+        var commandType = context.CommandType;
         if (commandType == null)
         {
             return CompletionResult.None();
@@ -408,9 +372,15 @@ public sealed partial class CompleteCommand : AsyncCommand<CompleteCommandSettin
             return CompletionResult.None();
         }
 
-        var parameterInfo = mappedParameter.ToMappedCommandParameter();
+        var parameterInfo = new InternalMappedCommandParameter(mappedParameter);
 
-        var completer = _typeResolver.Resolve(commandType);
+        var resolver = _resolverAccessor.Resolver;
+        if (resolver == null)
+        {
+            return CompletionResult.None();
+        }
+
+        var completer = resolver.Resolve(commandType);
         if (completer is IAsyncCommandCompletable typedAsyncCompleter)
         {
             return await typedAsyncCompleter.GetSuggestionsAsync(parameterInfo, context.ToMappedContext());

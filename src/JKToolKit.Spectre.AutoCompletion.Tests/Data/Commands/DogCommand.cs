@@ -3,7 +3,7 @@ namespace Spectre.Console.Tests.Data;
 [Description("The dog command.")]
 public class DogCommand : AnimalCommand<DogSettings>
 {
-    public override ValidationResult Validate(CommandContext context, DogSettings settings)
+    protected override ValidationResult Validate(CommandContext context, DogSettings settings)
     {
         if (context is null)
         {
@@ -23,7 +23,7 @@ public class DogCommand : AnimalCommand<DogSettings>
         return base.Validate(context, settings);
     }
 
-    public override int Execute(CommandContext context, DogSettings settings)
+    protected override int Execute(CommandContext context, DogSettings settings, CancellationToken cancellationToken)
     {
         DumpSettings(context, settings);
         return 0;

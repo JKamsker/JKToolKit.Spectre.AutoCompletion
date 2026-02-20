@@ -14,7 +14,7 @@ public class LsCommand : Command<LsCommand.Settings>
         public string Path { get; set; } = ".";
     }
 
-    public override int Execute(CommandContext context, Settings settings)
+    protected override int Execute(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         try
         {
